@@ -35,7 +35,7 @@ groups:
           description: "Le nombre moyen de requêtes est inférieur à 1 requête/seconde sur les 10 dernières minutes."
 
       - alert: NodeExporterDownDev
-        expr: up{job="node"} == 1
+        expr: up{job="node"} == 0
         for: 1m
         labels:
           severity: critical
@@ -45,7 +45,7 @@ groups:
           description: "Le service node_exporter (instance {{ $labels.instance }}) est inactif depuis plus de 1 minute."
 
       - alert: NodeExporterDownInfra
-        expr: up{job="node"} == 1
+        expr: up{job="node"} == 0
         for: 1m
         labels:
           severity: critical

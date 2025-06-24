@@ -1,0 +1,11 @@
+groups:
+  - name: node_status
+    rules:
+      - alert: NodeJobActive
+        expr: up{job="node"} == 1
+        for: 15s
+        labels:
+          severity: critical
+        annotations:
+          summary: "Le job 'node' est actif"
+          description: "Le job 'node' est plus accessible depuis plus de 15 secondes."

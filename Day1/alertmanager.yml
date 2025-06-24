@@ -2,8 +2,19 @@ global:
   resolve_timeout: 1m
 
 route:
-  receiver: 'console'
+  receiver: 'console'  # receiver par défaut si pas de correspondance
+  routes:
+    - match:
+        team: 'dev'
+      receiver: 'dev-team'
+    - match:
+        team: 'infra'
+      receiver: 'infra-team'
 
 receivers:
   - name: 'console'
 
+  - name: 'dev-team'
+
+
+  - name: 'infra-team'

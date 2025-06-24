@@ -8,4 +8,48 @@ groups:
           severity: critical
         annotations:
           summary: "Node Exporter UP (instance={{ $labels.instance }})"
-          description: "Le service node_exporter (instance {{ $labels.instance }}) ne répond depuis plus de 1 min."
+          description: "Le service node_exporter (instance {{ $labels.instance }}) est actif depuis au moins 1 min."
+
+      - alert: AppErrorRate
+        expr: |
+          rate(http_requests_total{status=~"5.."}[5m])
+          /
+          rate(http_requests_total[5m])
+          > 0.05
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Taux d'erreur élevé dans l'application"
+          description: "Plus de 5 % des requêtes HTTP ont échoué (5xx) sur les 5 dernières minutes."
+
+      - alert: AppTooFewRequests
+        expr: |
+          rate(http_requests_total[10m]) < 1
+        for: 1m
+        labels:
+          severity: warning
+
+        annotations:
+          summary: "Peu d'activité sur l'application"
+          description: "Le nombre moyen de requêtes est inférieur à 1 requête/seconde sur les 10 dernières minutes."
+
+      - alert: NodeExporterDownDev
+        expr: up{job="node"} == 1
+        for: 1m
+        labels:
+          severity: critical
+          team: dev
+        annotations:
+          summary: "Node Exporter DOWN (Dev)"
+          description: "Le service node_exporter (instance {{ $labels.instance }}) est inactif depuis plus de 1 minute."
+
+      - alert: NodeExporterDownInfra
+        expr: up{job="node"} == 1
+        for: 1m
+        labels:
+          severity: critical
+          team: infra
+        annotations:
+          summary: "Node Exporter DOWN (Infra)"
+          description: "Le service node_exporter (instance {{ $labels.instance }}) est inactif depuis plus de 1 minute."
